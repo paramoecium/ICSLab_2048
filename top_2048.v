@@ -11,7 +11,7 @@ module top_2048(
    right_n,
    
    // outputs
-
+   led_row,led_red
 );
 
 /*------------------------------*/
@@ -20,6 +20,7 @@ module top_2048(
 input              clk, rst_n;
 input              up_n, down_n, left_n, right_n;
 
+output       [7:0] led_row,led_red;
 
 /*------------------------------*/
 /* Regs and Wires               */
@@ -27,7 +28,7 @@ input              up_n, down_n, left_n, right_n;
 // state regs
 reg          [2:0] state, next_state;
 reg          [1:0] celli, next_celli,
-                   cellj, next_cellj;
+                   cellj, next_cellj,
                    cellk, next_cellk;
 
 // cell matrix
@@ -52,7 +53,13 @@ reg                moved, next_moved;
 reg                win, next_win,
                    lose, next_lose,
                    lose_aux, next_lose_aux;
-
+reg         [63:0] mat_flat;
+integer i,j;
+always@(*)begin
+    for(i=0;i<4;i=i+1) 
+        for(j=0;j<4;j=j+1)
+            mat_flat[16*i+4*j+:4] = mat[i][j][3:0];
+end
 // wires
 wire               game_over = win | lose;
 wire               state_mv = (state == S_MV_U | state == S_MV_D) |
@@ -109,7 +116,7 @@ level2pulse level2pulse3(
    .level(~right_n),
    .pulse(right_p)
 );
-
+LEDmatrix led(clk,mat_flat,led_row,led_red);
 /*------------------------------*/
 /* Combinational Circuits       */
 /*------------------------------*/
