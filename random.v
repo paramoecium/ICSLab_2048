@@ -1,26 +1,19 @@
-module random(clk,reset_n_debounced,get,out1,out2);//out1,out2:0~15
-    input           clk,reset_n_debounced,get;
+module random(clk,reset_n_debounced,out1,out2);//out1,out2:0~15
+    input           clk,reset_n_debounced;
     output  [3:0]   out1,out2;
-    reg     [3:0]   out1,out2;//hold the value until next "get" pulse
-    reg     [3:0]   random1,random2;
+    wire    [3:0]   out1,out2;
+    reg     [7:0]   random;
     reg             reset_n_debounced_delay;
     
+    assign          out1 = {random[7],random[5],random[3],random[1]};
+    assign          out2 = {random[6],random[4],random[2],random[0]};
     always@(posedge clk) begin//synchronous reset
         reset_n_debounced_delay <= reset_n_debounced;
         if((reset_n_debounced_delay)&(~reset_n_debounced)) begin
-            random1 <= 4'b0001;
-        end
-        else if((~reset_n_debounced_delay)&(reset_n_debounced)) begin
-            random1 <= random1 +4'd1;
-            random2 <= 4'b0001;
+            random <= 4'b0001;
         end
         else begin
-            random1 <= random1 + 4'd1;
-            random2 <= random2 + 4'd1;
-            if(get) begin
-                out1 <= random1;
-                out2 <= random2;
-            end        
+            random <= random + 4'd1;
         end    
     end
 endmodule

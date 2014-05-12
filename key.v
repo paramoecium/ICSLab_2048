@@ -37,8 +37,8 @@ module key_holder(clk,in,out,reset);
     output out;
     
     wire pos_in,neg_in;
-	 wire out = value_holder;
     reg value_holder;
+	 wire out = value_holder;
     key_edgedetector ked(clk,in,pos_in,neg_in);
     
     always@(posedge clk or negedge reset) begin

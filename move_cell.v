@@ -41,7 +41,7 @@ always @(*) begin
       next_from = 4'b0;
       next_to   = to + 1'b1;
       cont      = 1'b0;
-      moved     = 1'b0;
+      moved     = 1'b1;
    end
    else begin
       next_from = from;
