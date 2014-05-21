@@ -1,4 +1,4 @@
-module LEDmatrix(reset,clk,mat_flat,row,red);
+module LEDmatrix8(reset,clk,mat_flat,row,red);
     input           reset,clk;
     input   [63:0]  mat_flat;
 	output  [7:0]   row;
